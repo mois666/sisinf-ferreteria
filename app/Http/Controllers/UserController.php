@@ -33,6 +33,9 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        if(strlen($request->password) < 8 || strlen($request->password) > 16){
+            return back()->with('error', 'La contraseña debe tener entre 8 y 16 caracteres');
+        }
         $user = $request->all();
         $user['password'] = bcrypt($request->password);
         //upload image
@@ -70,8 +73,18 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, string $id)
+    public function update(Request $request, string $id)
     {
+
+        $request->validate([
+            'password' => 'required|string|min:8',
+            'password_confirm' => 'required|same:password',
+            'role' => 'required|string|in:admin,user',
+        ]);
+
+        if(strlen($request->password) < 8 || strlen($request->password) > 16){
+            return back()->with('error', 'La contraseña debe tener entre 8 y 16 caracteres');
+        }
         $user = User::find($id);
         $user['password'] = bcrypt($request->password);
         $user['name'] = $request->name;
@@ -88,7 +101,7 @@ class UserController extends Controller
             $user['avatar'] = $url;
         }
         $user->save();
-        return redirect()->route('users.index')->with('success', 'User updated successfully');
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado con éxito');
     }
 
     /**

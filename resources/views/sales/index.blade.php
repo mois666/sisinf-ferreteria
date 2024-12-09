@@ -50,6 +50,11 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h3>Total de ventas: Bs. {{ number_format($totalSales, 2, '.', ',') }}</h3>
+                            </div>
+                        </div>
                         @endif
                         <div class="table-responsive">
                             <table class="table">

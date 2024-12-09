@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="col-md-6 form-group row">
-        <label for="password_confirm" class="col-sm-3 col-form-label">Contraseña <span class="text-danger">*</span></label>
+        <label for="password_confirm" class="col-sm-3 col-form-label">Confirmar Contraseña <span class="text-danger">*</span></label>
         <div class="col-sm-9">
             <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Contraseña"
                 value="{{ old('password_confirm', '') }}">

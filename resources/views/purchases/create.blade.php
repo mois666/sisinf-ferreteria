@@ -43,6 +43,25 @@
         var revenue = price_sale - price;
         $('#revenue').html('Bs. '+revenue);
     });
+     /* El precio de venta no puede ingresar un valor negativo */
+     $('#price_sale').on('change, keyup', function() {
+        var price_sale = $('#price_sale').val();
+        if(price_sale < 0){
+            $('#price_sale').val(0);
+        }
+    });
+    $('#price').on('change, keyup', function() {
+        var price = $('#price').val();
+        if(price < 0){
+            $('#price').val(0);
+        }
+    });
+    $('#qty').on('change, keyup', function() {
+        var qty = $('#qty').val();
+        if(qty < 0){
+            $('#qty').val(0);
+        }
+    });
 
 </script>
 @endsection

@@ -16,11 +16,15 @@ class SaleController extends Controller
     {
         $filter = $request->get('filter');
         $search = $request->get('search');
+        $totalSales = 0;
         if($search){
             // Filtra las compras por el nombre del producto y las guarda en la variable $sales
             $sales = Sale::whereHas('client', function($query) use ($search){
                 $query->where('name', 'like', '%'.$search.'%');
             })->paginate(10);
+            $totalSales = Sale::whereHas('client', function($query) use ($search){
+                $query->where('name', 'like', '%'.$search.'%');
+            })->sum('total');
         }
         // Filtra por dia, semana, mes o año y las guarda en la variable $sales
         if($filter){
@@ -35,10 +39,11 @@ class SaleController extends Controller
             }else{
                 $sales = Sale::paginate(10);
             }
+            $totalSales = Sale::whereBetween('created_at', [date('Y-m-d', strtotime('-1 week')), date('Y-m-d')])->sum('total');
         }else{
             $sales = Sale::paginate(10);
         }
-        return view('sales.index', compact('sales', 'search', 'filter'));
+        return view('sales.index', compact('sales', 'search', 'filter', 'totalSales'));
     }
 
     public function create()
@@ -100,7 +105,7 @@ class SaleController extends Controller
     {
         $sale = Sale::find($id);
         $sale->update($request->all());
-        return redirect()->route('sales.index')->with('success', 'Sale updated successfully');
+        return redirect()->route('sales.index')->with('success', 'Venta actualizada con éxito');
     }
 
     public function show($id){
