@@ -24,7 +24,7 @@ class SaleController extends Controller
             })->paginate(10);
             $totalSales = Sale::whereHas('client', function($query) use ($search){
                 $query->where('name', 'like', '%'.$search.'%');
-            })->sum('total');
+            })->paginate(10);
         }
         // Filtra por dia, semana, mes o año y las guarda en la variable $sales
         if($filter){
@@ -42,7 +42,11 @@ class SaleController extends Controller
             $totalSales = Sale::whereBetween('created_at', [date('Y-m-d', strtotime('-1 week')), date('Y-m-d')])->sum('total');
         }else{
             $sales = Sale::paginate(10);
+            $totalSales = Sale::sum('total');
         }
+        /* Iterar iterar */
+
+
         return view('sales.index', compact('sales', 'search', 'filter', 'totalSales'));
     }
 
